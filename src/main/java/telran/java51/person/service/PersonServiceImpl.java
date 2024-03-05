@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import telran.java51.person.dao.PersonRepository;
 import telran.java51.person.dto.AddressDto;
+import telran.java51.person.dto.CityDto;
 import telran.java51.person.dto.PersonDto;
 import telran.java51.person.dto.exceptions.PersonNotFoundException;
 import telran.java51.person.model.Address;
@@ -89,6 +90,13 @@ public class PersonServiceImpl implements PersonService {
 		personRepository.save(person);
 		return modelMapper.map(person, PersonDto.class);
 	}
+
+	@Override
+	public Iterable<CityDto> getCitiesPopulation() {
+		return personRepository.getCitiesPopulation()
+			   .collect(Collectors.toList());
+	}
+	
 	
 
 }

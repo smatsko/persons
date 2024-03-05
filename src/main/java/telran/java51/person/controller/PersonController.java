@@ -67,10 +67,17 @@ public class PersonController {
 	}
 	
 
+	@GetMapping("/population/city") 
+	@Transactional(readOnly = true)
+	public Iterable<CityDto> getCityPopulationsList () {
+       	return  personService.getCitiesPopulation();	
+	}
+	
 	@GetMapping("/population/{city}") 
 	public CityDto getCityPopulation (@PathVariable String city) {
        	return (new CityDto(city, personService.getCityPopulation(city)));	
 	}
+
 
 	
 	
