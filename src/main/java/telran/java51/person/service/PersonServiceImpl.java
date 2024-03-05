@@ -75,6 +75,12 @@ public class PersonServiceImpl implements PersonService {
 		.collect(Collectors.toList());
 	}
 
+
+	@Override
+	public long getCityPopulation(String city) {
+		return personRepository.countByAddressCity(city);
+	}
+
 	
 	@Override
 	public PersonDto updateName(Integer id, String name) {
@@ -83,8 +89,6 @@ public class PersonServiceImpl implements PersonService {
 		personRepository.save(person);
 		return modelMapper.map(person, PersonDto.class);
 	}
-
-
 	
 
 }

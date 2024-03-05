@@ -19,5 +19,7 @@ public interface PersonService {
 	PersonDto updateName(Integer id, String name);
 
 	Iterable<PersonDto> findByAge(Integer fromAge, Integer toAge);
+
+	long getCityPopulation(String city);
 	
 }
