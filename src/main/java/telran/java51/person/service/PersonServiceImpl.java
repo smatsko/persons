@@ -53,33 +53,32 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 	@Override
 	public PersonDto findPersonById(Integer id) {
 		Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
-		System.out.println(person.getClass().getSimpleName());
-		if (person instanceof Child child) {
-			return modelMapper.map(child, ChildDto.class);
-		}
-		if (person instanceof Employee employee) {
-			return modelMapper.map(employee, EmployeeDto.class);
-		}
-		return modelMapper.map(person, PersonDto.class);
+		return getExtPerson(person);
 	}
+	
+
 
 	@Override
 	public PersonDto deletePerson(Integer id) {
 		Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
 		personRepository.delete(person);
-		return modelMapper.map(person, PersonDto.class);
+		return getExtPerson(person);
 
 	}
 
 	@Override
-	public Iterable<PersonDto> findPersonsByCity(String city) {
-		return personRepository.findByAddressCityIgnoreCase(city).map(p -> modelMapper.map(p, PersonDto.class))
+	public Iterable<PersonDto> findPersonsByCity(String city) {		
+		
+		return personRepository.findByAddressCityIgnoreCase(city)
+				.map(p -> getExtPerson(p))
 				.collect(Collectors.toList());
 	}
 
+	
 	@Override
 	public Iterable<PersonDto> findPersonsByName(String name) {
-		return personRepository.findByNameIgnoreCase(name).map(p -> modelMapper.map(p, PersonDto.class))
+		return personRepository.findByNameIgnoreCase(name)
+				.map(p -> getExtPerson(p))
 				.collect(Collectors.toList());
 	}
 
@@ -89,14 +88,14 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 		Address newAddress = modelMapper.map(addressDto, Address.class);
 		person.setAddress(newAddress);
 		personRepository.save(person);
-		return modelMapper.map(person, PersonDto.class);
+		return getExtPerson(person);
 	}
 
 	@Override
 	public Iterable<PersonDto> findByAge(Integer fromAge, Integer toAge) {
 		return personRepository
 				.findByBirthDateBetween(LocalDate.now().minusYears(toAge + 1), LocalDate.now().minusYears(fromAge))
-				.map(p -> modelMapper.map(p, PersonDto.class)).collect(Collectors.toList());
+				.map(p -> getExtPerson(p)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -109,7 +108,7 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 		Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
 		person.setName(name);
 		personRepository.save(person);
-		return modelMapper.map(person, PersonDto.class);
+		return getExtPerson(person);
 	}
 
 	@Override
@@ -135,6 +134,16 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 	}
 
 
+
+	private PersonDto getExtPerson(Person p) {
+    	if (p instanceof Child child) {
+	    	return modelMapper.map(child, ChildDto.class);
+    	}		
+    	if (p instanceof Employee employee) {
+			return modelMapper.map(employee, EmployeeDto.class);
+		}	
+    	return modelMapper.map(p, PersonDto.class);			
+	}
 	
 	
 	@Transactional
