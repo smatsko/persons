@@ -1,12 +1,15 @@
 package telran.java51.person.dao;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import telran.java51.person.dto.CityDto;
+import telran.java51.person.model.Child;
+import telran.java51.person.model.Employee;
 import telran.java51.person.model.Person;
 
 public interface PersonRepository extends CrudRepository<Person, Integer> {
@@ -24,5 +27,8 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 	@Query("SELECT new telran.java51.person.dto.CityDto(address.city,  COUNT(*)) FROM Person GROUP BY address.city")
 	Stream<CityDto> getCitiesPopulation();
 
-	
+	Stream<Employee> findBySalaryBetween(Integer fromSal, Integer toSal);
+
+	Stream<Child> findBy();
+
 }

@@ -2,7 +2,9 @@ package telran.java51.person.service;
 
 import telran.java51.person.dto.AddressDto;
 import telran.java51.person.dto.CityDto;
+import telran.java51.person.dto.EmployeeDto;
 import telran.java51.person.dto.PersonDto;
+import telran.java51.person.dto.ChildDto;
 
 public interface PersonService {
 	Boolean addPerson(PersonDto personDto);
@@ -24,5 +26,9 @@ public interface PersonService {
 	long getCityPopulation(String city);
 
 	Iterable<CityDto> getCitiesPopulation();
+
+	Iterable<ChildDto> getChildren();
+
+	Iterable<EmployeeDto> findBySal(Integer fromSal, Integer toSal);
 	
 }
